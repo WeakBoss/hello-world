@@ -59,7 +59,7 @@ int Prime::Get(){
    return mNum;
 } 
 int main() {
-  for(int i=113;i<=999;i++){ 
+  for(int i=100;i<=999;i++){ 
   Prime pm(i); 
   Prime sb = pm.sumBit();
   Prime mb = pm.multiBit();
