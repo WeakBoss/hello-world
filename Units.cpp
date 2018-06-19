@@ -2,11 +2,21 @@
 //重量单位：Kg, g, lb, gr,......
 //压力单位：Pa, MPa, psi,......
 //长度单位：m, km, ft, in,......
-//其它单位：md, cp,......
+//其它单位：md, cp,......    pa=N/m^2=kg*m/s^2 / m^2=kg/(m*s^2)
 //还有很多单位转换，有些单位是其它单位组合出来的
 #include<iostream>
 #include<string>
+#include<vector> 
+#include<cstdio>
+
 using namespace std;
+double pow(double num,int n){
+	double temp=num;
+	while(n--){
+		num=num*temp;
+	}
+	return num;
+}
 class unit_trans{//单位转换关系类 
 	public:
 		unit_trans(){
@@ -68,14 +78,17 @@ class num_unit:public unit_trans{
 	   	else if("cm"==goa_unit){goal=1;}
 	   	else if("km"==goa_unit){goal=2;}
 	   	else if("ft"==goa_unit){goal=3;}
-	   	else if("in"==goa_unit){goal=4;}    //发现这样效率太低了 
+	   	else if("in"==goa_unit){goal=4;}    //发现这样效率太低了   写一个函数来找到标签更好 
 		
 	   }
 	   void transfort(){
 	   	num=num/get_trans(type,ori)*get_trans(type,goal);
 	   }
+	   double getnum(){
+	   	return num;
+	   }
 	   void print(){
-	   	cout<<num<<goa_unit;
+	   	cout<<"转换结果："<<num;
 	   }
 	private:
 	   double num;
@@ -85,18 +98,121 @@ class num_unit:public unit_trans{
 	   int ori;
 	   int goal;
 };
+//使用组合类 
+class mix_num_unit:public unit_trans{
+	public:
+		mix_num_unit(double Num,int index_len,int index_tim,int index_wei,double a,string s1,string s2,double b,string s3,string s4,double c,string s5,string s6):len(a,s1,s2),tim(b,s3,s4),wei(c,s5,s6){
+			this->Num=Num;
+			this->index_len=index_len;
+			this->index_tim=index_tim;
+			this->index_wei=index_wei;
+		}
+		num_unit len;
+		num_unit tim;
+		num_unit wei;
+		double getNum(){
+			return Num;
+		}
+		int getindex_len(){
+			return index_len;
+		}
+		int getindex_tim(){
+			return index_tim;
+		}
+		int getindex_wei(){
+			return index_wei;
+		}
+	private:
+		double Num;
+		
+		int index_len;
+		
+		int index_tim;
+		
+		int index_wei;
+};
 int main(){
 	cout<<"单位转换程序"<<endl;
-	cout<<"可以转化的 单位包括 长度类：米m 厘米cm 千米km 英尺ft 英寸in"<<endl;
-	cout<<"                    时间类：毫秒ms 秒s 分钟minute 小时hour 天day"<<endl;
-	cout<<"                    质量类：克g 吨t 盎司oz 千克kg 毫克mg 磅lb 打兰dr"<<endl;
-	cout<<"使用示例："<<endl<<"    输入："<<endl<<"         5kg g"<<endl<<"    输出："<<endl<<"         5000g"<<endl;
+	cout<<"可以转化的 单位包括 1国际基本单位类: 长度类：米m 厘米cm 千米km 英尺ft 英寸in"<<endl;
+	cout<<"                                     时间类：毫秒ms 秒s 分钟minute 小时hour 天day"<<endl;
+	cout<<"                                     质量类：克g 吨t 盎司oz 千克kg 毫克mg 磅lb 打兰dr"<<endl;
+	cout<<"                     2非基本单位类:  密度类  千克/立方米kg/m^3 克/立方厘米g/cm^3"<<endl; 
+	cout<<"                                     速度类  米/秒m/s 英尺/秒ft/s"<<endl;    //这些单位可以有基本单位组合而来 
+	cout<<"请先选择单位种类";
+	cout<<"使用示例："<<endl<<"    输入："<<endl<<"           1       5kg g"<<endl<<"    输出："<<endl<<"         5000g"<<endl;
 	string s1,s2;
 	double num;
-	while(cin>>num>>s1>>s2){
+	int mark;
+	cin>>mark;
+	if(mark){
+		while(cin>>num>>s1>>s2){
 		num_unit unit(num,s1,s2);
 		unit.transfort();
 		unit.print();
+	}                                            //len tim wei
 	}
+	else{
+		while(cin>>num>>s1>>s2){
+			string A,B,C; 
+			string a,b,c;
+			int AA,BB,CC;
+			if(s1=="kg/m^3"){
+				A="m";
+				B="s";
+				C="kg";
+				AA=3;
+				BB=0;
+				CC=1;
+			}else if(s1=="g/cm^3"){
+				A="cm";
+				B="s";
+				C="g";
+				AA=3;
+				BB=0;
+				CC=1; 
+			}else if(s1=="m/s"){
+				A="m";
+				B="s";
+				C="kg";
+				AA=1;
+				BB=1;
+				CC=0;
+			}else if(s1=="kt/s"){
+				A="kt";
+				B="s";
+				C="kg";
+				AA=1;
+				BB=1;
+				CC=0;
+			}
+			
+			if(s2=="kg/m^3"){
+				a="m";
+				b="s";
+				c="kg";
+				
+			}else if(s2=="g/cm^3"){
+				a="cm";
+				b="s";
+				b="g";
+				
+			}else if(s2=="m/s"){
+				a="m";
+				b="s";
+				c="kg";
+				
+			}else if(s2=="kt/s"){
+				a="kt";
+				b="s";
+				c="kg";
+			} //mix_num_unit(doublt Num,int index_len,int index_tim,int index_wei,double a,string s1,string s2,double b,string s3,string s4,double c,string s5,string s6):len(a,s1,s2),tim(b,s3,s4),wei(c,s5,s6)
+			mix_num_unit unit(num,AA,BB,CC,1,A,a,1,B,b,1,C,c);
+			unit.len.transfort();
+			unit.tim.transfort();
+			unit.wei.transfort();
+			cout<<unit.getNum()*pow(unit.len.getnum(),unit.getindex_len())*pow(unit.tim.getnum(),unit.getindex_tim())*pow(unit.wei.getnum(),unit.getindex_wei());
+		}
+	}
+	
 	return 0;
 }
