@@ -68,7 +68,7 @@ class num_unit:public unit_trans{
 	   	else if("cm"==goa_unit){goal=1;}
 	   	else if("km"==goa_unit){goal=2;}
 	   	else if("ft"==goa_unit){goal=3;}
-	   	else if("in"==goa_unit){goal=4;}
+	   	else if("in"==goa_unit){goal=4;}    //发现这样效率太低了 
 		
 	   }
 	   void transfort(){
@@ -86,7 +86,11 @@ class num_unit:public unit_trans{
 	   int goal;
 };
 int main(){
-	cout<<"单位转换程序"<<endl<<"使用示例："<<endl<<"    输入："<<endl<<"         5kg g"<<endl<<"    输出："<<endl<<"         5000g"<<endl;
+	cout<<"单位转换程序"<<endl;
+	cout<<"可以转化的 单位包括 长度类：米m 厘米cm 千米km 英尺ft 英寸in"<<endl;
+	cout<<"                    时间类：毫秒ms 秒s 分钟minute 小时hour 天day"<<endl;
+	cout<<"                    质量类：克g 吨t 盎司oz 千克kg 毫克mg 磅lb 打兰dr"<<endl;
+	cout<<"使用示例："<<endl<<"    输入："<<endl<<"         5kg g"<<endl<<"    输出："<<endl<<"         5000g"<<endl;
 	string s1,s2;
 	double num;
 	while(cin>>num>>s1>>s2){
