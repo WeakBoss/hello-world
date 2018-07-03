@@ -8,7 +8,7 @@
 #include<string>
 #include<vector> 
 #include<cstdio>
-
+//写得太繁琐 出现了很多小问题 最后解决了。。。。 
 using namespace std;
 double POW(double num, int n) {
 	if (n == 0) return 1;
